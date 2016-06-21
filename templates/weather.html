@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}Bmail login{% endblock title %}
+
+{% block specifika %}
+
+<h1>Trenutno vreme v mestu {{ vreme.name }}</h1>
+    <p>Opis: {{ vreme.weather[0].description }}</p>
+    <p>Temperatura: {{ vreme.main.temp }}</p>
+
+{% endblock specifika %}

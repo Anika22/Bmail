@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Sent messages{% endblock title %}
+
+{% block specifika %}
+
+    <p>List of sent messages:</p>
+    {% for msg in list_sent_messages %}
+        <p>{{ msg.sender }}</p>
+        <p>{{ msg.receiver }}</p>
+        <p>{{ msg.sent_message}}</p>
+
+    {% endfor %}
+
+{% endblock specifika %}
