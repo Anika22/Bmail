@@ -42,15 +42,12 @@
       </div><!-- /.container-fluid -->
     </nav>
 
-{% if logged_in %}
+{% if not logged_in %}
 
-    <h1>Hello, {{ user.nickname() }}!</h1>
-
-    <p><a href="{{ logout_url }}">Odjava</a></p>
-
-{% else %}
-    <h1>Hello, stranger!</h1>
-    <p><a href="{{ login_url }}">Prijava</a></p>
+    <h1>Hello, dear stranger. <small>Please sign in to continue.</small></h1>
+    <p>
+        <button type="button" class="btn btn-default btn-lg"><a href="{{ login_url }}">Sign in</a></button>
+    </p>
 {% endif %}
 
 

@@ -5,5 +5,12 @@
 {% block specifika %}
 
 <p>received messages - list</p>
+<!--uporabi tale list za prikaz sporocil-->
+<!--Make terms and descriptions in <dl> line up side-by-side. Starts off stacked like default <dl>s, but when the navbar expands, so do these.-->
+    <dl class="dl-horizontal">
+      <dt>{{ sender }}</dt>
+      <dd> {{ message }} </dd>
+        <dd>{{ created }}</dd>
+    </dl>
 
 {% endblock specifika %}

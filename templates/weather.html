@@ -4,8 +4,32 @@
 
 {% block specifika %}
 
-<h1>Trenutno vreme v mestu {{ vreme.name }}</h1>
-    <p>Opis: {{ vreme.weather[0].description }}</p>
-    <p>Temperatura: {{ vreme.main.temp }}</p>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">{{vreme_lj.name}}</h3>
+        </div>
+        <div class="panel-body">
+        <p>Vreme v mestu <mark>{{ vreme_lj.name }}</mark> je <mark>{{ vreme_lj.weather[0].description }}</mark> s temperaturo <mark>{{ vreme_lj.main.temp }}</mark>.</p>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">{{vreme_mb.name}}</h3>
+        </div>
+        <div class="panel-body">
+        <p>Vreme v mestu <mark>{{ vreme_mb.name }}</mark> je <mark>{{ vreme_mb.weather[0].description }}</mark> s temperaturo <mark>{{ vreme_mb.main.temp }}</mark>.</p>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">{{vreme_kp.name}}</h3>
+        </div>
+        <div class="panel-body">
+        <p>Vreme v mestu <mark>{{ vreme_kp.name }}</mark> je <mark>{{ vreme_kp.weather[0].description }}</mark> s temperaturo <mark>{{ vreme_kp.main.temp }}</mark>.</p>
+        </div>
+    </div>
 
 {% endblock specifika %}

@@ -5,6 +5,13 @@
 {% block specifika %}
 
     <p>List of sent messages:</p>
+<!--uporabi tale list za prikaz sporocil-->
+<!--Make terms and descriptions in <dl> line up side-by-side. Starts off stacked like default <dl>s, but when the navbar expands, so do these.-->
+    <dl class="dl-horizontal">
+      <dt>...</dt>
+      <dd>...</dd>
+    </dl>
+
     {% for msg in list_sent_messages %}
         <p>{{ msg.sender }}</p>
         <p>{{ msg.receiver }}</p>

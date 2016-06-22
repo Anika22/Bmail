@@ -38,7 +38,7 @@ class MainHandler(BaseHandler):
             logged_in = True
             logout_url = users.create_logout_url("/")
             params = {"logged_in":logged_in, "logout_url":logout_url, "user":user}
-            return self.render_template("logged_in.html", params=params)
+            return self.render_template("received_messages.html", params=params)
         else:
             logged_in = False
             login_url = users.create_login_url("/")
@@ -65,24 +65,39 @@ class ReceivedMessagesHandler(MainHandler):
 
 class SentMessagesHandler(MainHandler):
     def get(self):
-        list_sent_messages = Messages.query().fetch()
+        list_sent_messages = Messages.query(Messages.receiver == "user").fetch()
         params={"list_sent_messages": list_sent_messages}
         return self.render_template("sent_messages.html", params=params)
 
 class WeatherHandler(BaseHandler):
     def get(self):
-        url = "http://api.openweathermap.org/data/2.5/weather?q=Ljubljana,si&units=metric&appid=1a7a8316bbdf86386242c6b2271524f0"
-        result = urlfetch.fetch(url)
-        vreme = json.loads(result.content)
-        params={"vreme":vreme}
-        return self.render_template("weather.html")
+        url_lj = "http://api.openweathermap.org/data/2.5/weather?q=Ljubljana,si&units=metric&appid=1a7a8316bbdf86386242c6b2271524f0"
+        result_lj = urlfetch.fetch(url_lj)
+        vreme_lj = json.loads(result_lj.content)
+        url_mb = "http://api.openweathermap.org/data/2.5/weather?q=maribor,si&units=metric&appid=1a7a8316bbdf86386242c6b2271524f0"
+        result_mb = urlfetch.fetch(url_mb)
+        vreme_mb = json.loads(result_mb.content)
+        url_kp = "http://api.openweathermap.org/data/2.5/weather?q=Koper,si&units=metric&appid=1a7a8316bbdf86386242c6b2271524f0"
+        result_kp = urlfetch.fetch(url_kp)
+        vreme_kp = json.loads(result_kp.content)
+        params={"vreme_kp":vreme_kp, "vreme_lj":vreme_lj, "vreme_mb":vreme_mb}
+        return self.render_template("weather.html", params=params)
+
+class ProfileHandler(MainHandler):
+    def get(self):
+        user = users.get_current_user()
+        if user:
+            logged_in = True
+            params={"user":user, "logged_in":logged_in}
+        return self.render_template("profile.html", params=params)
+
 
 
 app = webapp2.WSGIApplication([
     webapp2.Route('/', MainHandler),
-    webapp2.Route('/logged_in', MainHandler),
+    webapp2.Route('/received_messages', MainHandler),
     webapp2.Route('/new_message', NewMessageHandler),
-    webapp2.Route('/received_messages', ReceivedMessagesHandler),
     webapp2.Route('/sent_messages', SentMessagesHandler),
     webapp2.Route('/weather', WeatherHandler),
+    webapp2.Route('/profile', ProfileHandler),
 ], debug=True)
