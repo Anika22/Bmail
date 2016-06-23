@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block title %}Bmail Message{% endblock title %}
+
+{% block specifika %}
+    <p>Sender: {{ message.sender }}</p>
+    <p>Message: {{ message.message }}</p>
+    <p>Created: {{ message.created }}</p>
+    <p>Message ID: {{ message.key.id() }}</p>
+{% endblock specifika %}

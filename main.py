@@ -38,36 +38,78 @@ class MainHandler(BaseHandler):
             logged_in = True
             logout_url = users.create_logout_url("/")
             params = {"logged_in":logged_in, "logout_url":logout_url, "user":user}
-            return self.render_template("received_messages.html", params=params)
+            return self.redirect_to("received_messages", params=params)
         else:
             logged_in = False
             login_url = users.create_login_url("/")
             params = {"logged_in":logged_in, "login_url":login_url, "user":user}
-        return self.render_template("login.html", params=params)
+            return self.render_template("login.html", params=params)
 
-class NewMessageHandler(MainHandler):
+class ReceivedMessagesHandler(BaseHandler):
     def get(self):
-        return self.render_template("new_message.html")
+        user = users.get_current_user()
+        if user:
+            logged_in = True
+            logout_url = users.create_logout_url("/")
+            params = {"logged_in":logged_in, "logout_url":logout_url, "user":user}
+            return self.render_template("received_messages.html", params=params)
+        else:
+            logged_in = False
+            login_url = users.create_login_url("/")
+            params = {"logged_in": logged_in, "login_url": login_url, "user": user}
+            return self.redirect_to("login", params=params)
 
+class NewMessageHandler(BaseHandler):
+    def get(self):
+        user = users.get_current_user()
+        if user:
+            logged_in = True
+            logout_url = users.create_logout_url("/")
+            params = {"logged_in": logged_in, "logout_url": logout_url, "user": user}
+            return self.render_template("new_message.html", params=params)
+
+
+class SentMsgHandler(BaseHandler):
     def post(self):
-        sender = self.request.get("sender")
-        receiver = self.reques.get("receiver")
         sent_message = self.request.get("sent_message")
-        sent_messages = Messages(sender=sender, receiver=receiver, message=sent_message)
-        sent_messages.put()
-        return self.render_template("sent_messages.html")
+        sender=self.request.get("sender")
+        receiver=self.request.get("receiver")
+        message=Messages(sent_message=sent_message, sender=sender, receiver=receiver)
+        message.put()
+        return self.write(message)
 
-
-
-class ReceivedMessagesHandler(MainHandler):
+class SentMessagesHandler(BaseHandler):
     def get(self):
-        return self.render_template("received_messages.html")
+        user = users.get_current_user()
+        if user:
+            logged_in = True
+            logout_url = users.create_logout_url("/")
+            list_sent_messages = Messages.query().fetch()
+            params = {"logged_in": logged_in, "logout_url": logout_url, "user": user, "list_sent_messages": list_sent_messages}
+            return self.render_template("sent_messages.html", params=params)
+        else:
+            logged_in = False
+            login_url = users.create_login_url("/")
+            params = {"logged_in": logged_in, "login_url": login_url, "user": user}
+            return self.redirect_to("login", params=params)
 
-class SentMessagesHandler(MainHandler):
-    def get(self):
-        list_sent_messages = Messages.query(Messages.receiver == "user").fetch()
-        params={"list_sent_messages": list_sent_messages}
-        return self.render_template("sent_messages.html", params=params)
+class IndMessageHandler(BaseHandler):
+    def get(self, message_id):
+        sent_message = Messages.get_by_id(int(message_id))
+        params = {"sent_message":sent_message}
+        return self.render_template("ind_message.html", params=params)
+
+class EditMessageHandler(BaseHandler):
+    def get(self, message_id):
+        sent_message = Messages.get_by_id(int(message_id))
+        params = {"message": sent_message}
+        return self.render_template("edit_message.html", params=params)
+    def post(self, message_id):
+        sent_msg = self.request.get("sent_message")
+        sent_message=Messages.get_by_id(int(message_id))
+        sent_message.sent.msg=sent_msg
+        sent_message.put()
+        return self.redirect_to("sent_messages")
 
 class WeatherHandler(BaseHandler):
     def get(self):
@@ -94,10 +136,15 @@ class ProfileHandler(MainHandler):
 
 
 app = webapp2.WSGIApplication([
-    webapp2.Route('/', MainHandler),
-    webapp2.Route('/received_messages', MainHandler),
+    webapp2.Route('/', MainHandler, name="login"),
+    webapp2.Route('/sent_msg', SentMsgHandler),
+    webapp2.Route('/received_messages', ReceivedMessagesHandler, name="received_messages"),
     webapp2.Route('/new_message', NewMessageHandler),
-    webapp2.Route('/sent_messages', SentMessagesHandler),
+    webapp2.Route('/sent_messages', SentMessagesHandler, name="sent_messages"),
+    webapp2.Route('/ind_message/<message_id:\d+>', IndMessageHandler),
+    webapp2.Route('/edit_message', EditMessageHandler),
+
+
     webapp2.Route('/weather', WeatherHandler),
     webapp2.Route('/profile', ProfileHandler),
 ], debug=True)

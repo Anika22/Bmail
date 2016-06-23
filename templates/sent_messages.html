@@ -4,19 +4,34 @@
 
 {% block specifika %}
 
-    <p>List of sent messages:</p>
-<!--uporabi tale list za prikaz sporocil-->
-<!--Make terms and descriptions in <dl> line up side-by-side. Starts off stacked like default <dl>s, but when the navbar expands, so do these.-->
-    <dl class="dl-horizontal">
-      <dt>...</dt>
-      <dd>...</dd>
-    </dl>
+    <h2>Sent messages <small>Everything you've asked of people.</small></h2>
 
-    {% for msg in list_sent_messages %}
-        <p>{{ msg.sender }}</p>
-        <p>{{ msg.receiver }}</p>
-        <p>{{ msg.sent_message}}</p>
+    <div class="container-fluid">
+    <div class="row">
+    <table class="table table-hover">
+        <tr>
+            <div class="col-md-4"><th>To</th></div>
+            <div class="col-md-6"><th>Message</th></div>
+            <div class="col-md-1"><th>Time</th></div>
+        </tr>
+        <tr>
 
-    {% endfor %}
+            <td></td>
+            <td></td>
+            <td></td>
 
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+    </div>
+    </div>
 {% endblock specifika %}
